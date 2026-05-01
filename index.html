@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Untuk Seseorang yang Spesial 💕</title>
+    <meta name="description" content="A special page for someone very dear to my heart">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Great+Vibes&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Music (optional) -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- Add music source here if desired -->
+    </audio>
+
+    <!-- Floating Flower Petals Canvas -->
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- Navigation Dots -->
+    <nav id="navDots" class="nav-dots">
+        <button class="dot active" data-slide="0" aria-label="Slide 1"></button>
+        <button class="dot" data-slide="1" aria-label="Slide 2"></button>
+        <button class="dot" data-slide="2" aria-label="Slide 3"></button>
+        <button class="dot" data-slide="3" aria-label="Slide 4"></button>
+        <button class="dot" data-slide="4" aria-label="Slide 5"></button>
+    </nav>
+
+    <!-- Scroll Indicator -->
+    <div id="scrollIndicator" class="scroll-indicator">
+        <div class="scroll-arrow"></div>
+        <span>Geser ke bawah</span>
+    </div>
+
+    <!-- ==================== SLIDE 1: OPENING ==================== -->
+    <section class="slide slide-1 active" id="slide-0">
+        <div class="overlay-gradient"></div>
+        <div class="flower-container">
+            <div class="flower">
+                <div class="flower__glass">
+                    <div class="flower__glass__before"></div>
+                </div>
+                <div class="flower__wrapper">
+                    <div class="flower__line"></div>
+                    <div class="flower__center"></div>
+                    <div class="flower__petal flower__petal--1"></div>
+                    <div class="flower__petal flower__petal--2"></div>
+                    <div class="flower__petal flower__petal--3"></div>
+                    <div class="flower__petal flower__petal--4"></div>
+                    <div class="flower__petal flower__petal--5"></div>
+                    <div class="flower__petal flower__petal--6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-content opening-content">
+            <div class="sparkle-container">
+                <div class="sparkle s1">✦</div>
+                <div class="sparkle s2">✧</div>
+                <div class="sparkle s3">✦</div>
+                <div class="sparkle s4">✧</div>
+            </div>
+            <p class="opening-subtext">Sebuah halaman spesial</p>
+            <h1 class="opening-text">Untuk Seseorang<br>yang Sangat Berarti</h1>
+            <p class="opening-subtext" style="margin-top:2rem">Untuk <span style="color:var(--accent-pink); font-weight:600">Asri Meilandari</span></p>
+            <button class="opening-subtext" style="background:var(--accent-pink); border:none; padding:10px 20px; color:white; border-radius:20px; margin-top:2rem; cursor:pointer;" id="btnStart">
+                Buka Ceritanya
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== SLIDE 2: MEMORIES / PHOTOS ==================== -->
+    <section class="slide slide-2" id="slide-1">
+        <div class="overlay-gradient overlay-warm"></div>
+        <div class="slide-content memories-content">
+            <h2 class="section-title animate-on-view">Kenangan Indah Kita</h2>
+            <p class="section-subtitle animate-on-view">Setiap momen bersamamu adalah hadiah terindah</p>
+            
+            <div class="photo-gallery">
+                <div class="photo-card animate-on-view" data-delay="100">
+                    <div class="photo-frame">
+                        <img src="foto-foto/sonice.jpg" alt="Momen indah bersama" loading="lazy">
+                    </div>
+                    <p class="photo-caption">Momen yang tak terlupakan ✨</p>
+                </div>
+                <div class="photo-card animate-on-view" data-delay="200">
+                    <div class="photo-frame">
+                        <img src="foto-foto/loveher.jpg" alt="Bersama kamu" loading="lazy">
+                    </div>
+                    <p class="photo-caption">Bersama kamu, duniaku terasa lengkap 💕</p>
+                </div>
+                <div class="photo-card animate-on-view" data-delay="300">
+                    <div class="photo-frame">
+                        <img src="foto-foto/makanbareng.jpeg" alt="Makan bersama" loading="lazy">
+                    </div>
+                    <p class="photo-caption">Makan bareng kamu selalu jadi momen paling bahagia 🍜</p>
+                </div>
+                <div class="photo-card animate-on-view" data-delay="400">
+                    <div class="photo-frame">
+                        <img src="foto-foto/alwaysbeautiful.png" alt="Selalu cantik" loading="lazy">
+                    </div>
+                    <p class="photo-caption">Kamu selalu cantik di setiap momen 🌸</p>
+                </div>
+                <div class="photo-card animate-on-view" data-delay="500">
+                    <div class="photo-frame">
+                        <img src="foto-foto/missher.jpg" alt="Rindu kamu" loading="lazy">
+                    </div>
+                    <p class="photo-caption">Selalu kangen sama senyummu 🥰</p>
+                </div>
+                <div class="photo-card animate-on-view" data-delay="600">
+                    <div class="photo-frame">
+                        <img src="foto-foto/my babyy.jpeg" alt="My baby" loading="lazy">
+                    </div>
+                    <p class="photo-caption">My baby yang selalu bikin hari-hariku berwarna 💖</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SLIDE 3: POETRY ==================== -->
+    <section class="slide slide-3" id="slide-2">
+        <div class="overlay-gradient overlay-romantic"></div>
+        <div class="floating-hearts">
+            <div class="heart h1">💗</div>
+            <div class="heart h2">💕</div>
+            <div class="heart h3">💖</div>
+            <div class="heart h4">💗</div>
+            <div class="heart h5">💕</div>
+        </div>
+        <div class="slide-content poetry-content">
+            <div class="poetry-container">
+                <h2 class="poetry-title animate-on-view">Untukmu, Cintaku</h2>
+                <div class="poetry-divider animate-on-view">
+                    <span>💌</span>
+                </div>
+                <div class="poem animate-on-view">
+                    <p class="poem-line" data-delay="0">
+                        Di antara jutaan bintang yang bersinar,
+                    </p>
+                    <p class="poem-line" data-delay="150">
+                        Kaulah yang paling terang menerangi malamku.
+                    </p>
+                    <p class="poem-line" data-delay="300">
+                        Di antara sejuta bunga yang bermekaran,
+                    </p>
+                    <p class="poem-line" data-delay="450">
+                        Kaulah yang paling harum memenuhi hatiku.
+                    </p>
+                    <br>
+                    <p class="poem-line" data-delay="600">
+                        Asri, namamu saja sudah seperti puisi,
+                    </p>
+                    <p class="poem-line" data-delay="750">
+                        Indah, lembut, dan penuh makna.
+                    </p>
+                    <p class="poem-line" data-delay="900">
+                        Setiap detik bersamamu adalah anugerah,
+                    </p>
+                    <p class="poem-line" data-delay="1050">
+                        Yang tak pernah kuinginkan untuk berakhir.
+                    </p>
+                    <br>
+                    <p class="poem-line" data-delay="1200">
+                        Kamu adalah alasan aku tersenyum di pagi hari,
+                    </p>
+                    <p class="poem-line" data-delay="1350">
+                        Dan mimpi indah yang menghiasi malamku.
+                    </p>
+                    <p class="poem-line" data-delay="1500">
+                        Cintaku padamu bukan sekadar kata-kata,
+                    </p>
+                    <p class="poem-line" data-delay="1650">
+                        Tapi janji yang terukir dalam setiap detak jantungku.
+                    </p>
+                    <br>
+                    <p class="poem-line poem-signature" data-delay="1800">
+                        — Dengan segenap cinta, dari aku untukmu 💕
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SLIDE 4: MORE PHOTOS ==================== -->
+    <section class="slide slide-4" id="slide-3">
+        <div class="overlay-gradient overlay-dreamy"></div>
+        <div class="slide-content gallery-content">
+            <h2 class="section-title animate-on-view">Kamu Selalu Cantik</h2>
+            <p class="section-subtitle animate-on-view">Setiap sisi dirimu adalah keindahan yang nyata</p>
+            
+            <div class="beauty-gallery">
+                <div class="beauty-card main-card animate-on-view" data-delay="100">
+                    <div class="beauty-frame">
+                        <img src="foto-foto/sobeautiful.jpeg" alt="So beautiful" loading="lazy">
+                    </div>
+                    <div class="beauty-overlay">
+                        <p>So Beautiful 🌹</p>
+                    </div>
+                </div>
+                <div class="beauty-card animate-on-view" data-delay="300">
+                    <div class="beauty-frame">
+                        <img src="foto-foto/full beautiful.jpeg" alt="Full beautiful" loading="lazy">
+                    </div>
+                    <div class="beauty-overlay">
+                        <p>Always Beautiful 💖</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SLIDE 5: BIRTHDAY GREETING ==================== -->
+    <section class="slide slide-5" id="slide-4">
+        <div class="overlay-gradient overlay-celebration"></div>
+        <div class="confetti-container" id="confettiContainer"></div>
+        <div class="fireworks-container" id="fireworksContainer"></div>
+        <div class="slide-content birthday-content">
+            <div class="birthday-reveal">
+                <div class="surprise-text animate-on-view">🎉 Surprise! 🎉</div>
+                <h1 class="birthday-title animate-on-view" data-delay="300">Selamat Ulang Tahun!</h1>
+                <div class="birthday-name-container animate-on-view" data-delay="600">
+                    <h2 class="birthday-name">Asri Meilandari</h2>
+                    <div class="birthday-date">1 Mei 2026</div>
+                </div>
+                <div class="birthday-cake animate-on-view" data-delay="900">🎂</div>
+                <div class="birthday-photo animate-on-view" data-delay="1000">
+                    <div class="birthday-photo-frame">
+                        <img src="foto-foto/sonice.jpg" alt="Happy Birthday Asri" loading="lazy">
+                    </div>
+                </div>
+                <div class="birthday-message animate-on-view" data-delay="1200">
+                    <p>Selamat ulang tahun, cintaku! 🎊</p>
+                    <p>Semoga di usiamu yang baru ini,</p>
+                    <p>semua mimpi-mimpimu terwujud,</p>
+                    <p>kebahagiaanmu berlipat ganda,</p>
+                    <p>dan cinta kita semakin kuat. 💕</p>
+                    <br>
+                    <p>Terima kasih sudah hadir di hidupku,</p>
+                    <p>menjadi alasan untuk terus berjuang,</p>
+                    <p>dan mengisi hari-hariku dengan kebahagiaan.</p>
+                    <br>
+                    <p class="birthday-wish-highlight">Aku mencintaimu, sekarang dan selamanya. ❤️</p>
+                </div>
+                <div class="birthday-closing animate-on-view" data-delay="1500">
+                    <p class="from-text">Dengan cinta yang tak terhingga,</p>
+                    <p class="from-name">Andika ❤️</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

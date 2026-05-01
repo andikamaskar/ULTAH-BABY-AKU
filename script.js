@@ -14,10 +14,52 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Global Audio Playback (overcomes browser autoplay restrictions)
+    let audioPlayed = false;
+    function tryPlayAudio() {
+        if (!audioPlayed) {
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.volume = 0.5;
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        audioPlayed = true;
+                    }).catch(error => {
+                        console.log("Audio playback failed:", error);
+                    });
+                }
+            }
+        }
+    }
+
+    // Attempt to play music on ANY user interaction anywhere on the screen
+    document.body.addEventListener('click', tryPlayAudio);
+    document.body.addEventListener('touchstart', tryPlayAudio);
+
     // Start Button Event
     if (btnStart) {
         btnStart.addEventListener('click', () => {
+            document.body.classList.add('started'); // Show navigation controls
             goToSlide(1);
+            
+            // Play background music
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.volume = 0.5; // Set volume to 50% so it's not too loud
+                bgMusic.play().catch(error => {
+                    console.log("Autoplay prevented by browser:", error);
+                });
+            }
+        });
+    }
+
+    // Close Letter Modal
+    const closeLetterBtn = document.getElementById('closeLetter');
+    const letterModal = document.getElementById('letterModal');
+    if (closeLetterBtn && letterModal) {
+        closeLetterBtn.addEventListener('click', () => {
+            letterModal.classList.remove('show');
         });
     }
 
@@ -49,6 +91,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle Scroll/Wheel events
     window.addEventListener('wheel', (e) => {
+        // Prevent scrolling out of the first slide
+        if (currentSlide === 0) return;
+
+        const slide = slides[currentSlide];
+        
+        // If the slide content is taller than the screen, allow native scrolling first
+        if (slide.scrollHeight > slide.clientHeight) {
+            const atTop = slide.scrollTop <= 0;
+            const atBottom = Math.abs(slide.scrollHeight - slide.clientHeight - slide.scrollTop) <= 2;
+            
+            // Allow scrolling down if not at bottom
+            if (e.deltaY > 0 && !atBottom) return;
+            // Allow scrolling up if not at top
+            if (e.deltaY < 0 && !atTop) return;
+        }
+
         if (e.deltaY > 50) {
             goToSlide(currentSlide + 1); // Scroll Down
         } else if (e.deltaY < -50) {
@@ -70,6 +128,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function handleSwipe() {
+        // Prevent swiping out of the first slide
+        if (currentSlide === 0) return;
+
+        const slide = slides[currentSlide];
+        
+        // If the slide is scrollable, allow native touch scroll first
+        if (slide.scrollHeight > slide.clientHeight) {
+            const atTop = slide.scrollTop <= 0;
+            const atBottom = Math.abs(slide.scrollHeight - slide.clientHeight - slide.scrollTop) <= 2;
+            
+            // Swiping Up (scrolling down)
+            if (touchEndY < touchStartY - 50 && !atBottom) return;
+            // Swiping Down (scrolling up)
+            if (touchEndY > touchStartY + 50 && !atTop) return;
+        }
+
         if (touchEndY < touchStartY - 50) {
             goToSlide(currentSlide + 1); // Swipe Up
         }
@@ -80,8 +154,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle specific slide logic (e.g., Confetti on last slide)
     function handleSlideAnimations(index) {
+        const indicator = document.getElementById('scrollIndicator');
+        
         if (index === slides.length - 1) {
             fireConfetti();
+            // Replace scroll indicator with Letter Button
+            if (indicator) {
+                indicator.innerHTML = '<button id="btnLetter" class="btn-letter animate-text">Buka Pesan Rahasia 💌</button>';
+                indicator.style.animation = 'none';
+                
+                // Add event listener to the new button
+                setTimeout(() => {
+                    const btnLetter = document.getElementById('btnLetter');
+                    if (btnLetter) {
+                        btnLetter.addEventListener('click', () => {
+                            document.getElementById('letterModal').classList.add('show');
+                        });
+                    }
+                }, 100);
+            }
+        } else {
+            // Restore scroll indicator
+            if (indicator) {
+                indicator.innerHTML = '<div class="scroll-arrow"></div><span>Geser ke bawah</span>';
+                indicator.style.animation = 'bounce 2s infinite';
+            }
         }
     }
 

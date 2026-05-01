@@ -43,11 +43,19 @@ body {
     transition: opacity 1s ease-in-out, visibility 1s;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2rem;
+    padding: 2rem; /* Restore full padding to prevent edge touching */
     z-index: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Pseudo-elements to center content vertically while allowing safe overflow scrolling */
+.slide::before,
+.slide::after {
+    content: '';
+    margin: auto;
 }
 
 .slide.active {
@@ -168,29 +176,69 @@ body {
     100% { transform: translateX(-50%) scale(1); }
 }
 
+/* Animations for Opening Slide Texts */
 .opening-text {
     font-family: var(--font-heading);
-    font-size: 2rem;
+    font-size: 2.5rem;
     letter-spacing: 2px;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     opacity: 0;
-    animation: fadeInText 3s 6s forwards;
+    transform: translateY(20px);
+    animation: slideUpFade 1.5s 5s forwards;
     text-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 .opening-subtext {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 300;
     margin-top: 1rem;
     opacity: 0;
-    animation: fadeInText 3s 7s forwards;
+    transform: translateY(20px);
+    animation: slideUpFade 1.5s 5.5s forwards;
+}
+#btnStart {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 1.5s 6.5s forwards;
+    transition: background 0.3s, transform 0.3s;
+}
+#btnStart:hover {
+    background: #ff5e7a !important;
+    transform: scale(1.05) !important;
 }
 
-@keyframes fadeInText {
-    to { opacity: 1; }
+@keyframes slideUpFade {
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
+
+/* Animations triggered when slide is active */
+.slide .animate-on-view, .slide .animate-text {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.slide.active .animate-on-view, .slide.active .animate-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Add custom transition delays for elements using data-delay attributes (if any) */
+.slide.active [data-delay="100"] { transition-delay: 0.1s; }
+.slide.active [data-delay="200"] { transition-delay: 0.2s; }
+.slide.active [data-delay="300"] { transition-delay: 0.3s; }
+.slide.active [data-delay="400"] { transition-delay: 0.4s; }
+.slide.active [data-delay="500"] { transition-delay: 0.5s; }
+.slide.active [data-delay="600"] { transition-delay: 0.6s; }
+.slide.active [data-delay="900"] { transition-delay: 0.9s; }
+.slide.active [data-delay="1000"] { transition-delay: 1.0s; }
+.slide.active [data-delay="1200"] { transition-delay: 1.2s; }
+.slide.active [data-delay="1500"] { transition-delay: 1.5s; }
 
 /* Navigation Controls */
-.nav-controls {
+.nav-dots {
     position: fixed;
     right: 2rem;
     top: 50%;
@@ -199,32 +247,51 @@ body {
     flex-direction: column;
     gap: 1rem;
     z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
 }
 
-.nav-dot {
+body.started .nav-dots {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dot {
     width: 12px;
     height: 12px;
+    border: none;
     border-radius: 50%;
     background-color: rgba(255,255,255,0.3);
     cursor: pointer;
     transition: all 0.3s;
 }
 
-.nav-dot.active {
+.dot.active {
     background-color: var(--accent-pink);
-    transform: scale(1.3);
+    transform: scale(1.4);
     box-shadow: 0 0 10px var(--accent-pink);
 }
 
-.scroll-hint {
+.scroll-indicator {
     position: fixed;
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.9rem;
-    opacity: 0.7;
+    opacity: 0;
+    pointer-events: none;
     animation: bounce 2s infinite;
     z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.5s;
+}
+
+body.started .scroll-indicator {
+    opacity: 0.7;
+    pointer-events: auto;
 }
 
 @keyframes bounce {
@@ -233,139 +300,454 @@ body {
     60% { transform: translateX(-50%) translateY(-5px); }
 }
 
-/* Slide 2: Memories */
-.gallery {
+/* ================== GENERAL TYPOGRAPHY ================== */
+.section-title {
+    font-family: var(--font-cursive);
+    font-size: 3.5rem;
+    color: var(--accent-pink);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 10px rgba(255,117,143,0.3);
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin-bottom: 3rem;
+    opacity: 0.8;
+}
+
+/* ================== SLIDE 2: MEMORIES ================== */
+.photo-gallery {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem;
-    max-width: 900px;
-}
-
-.polaroid {
-    background: #fff;
-    padding: 10px 10px 30px 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transform: rotate(calc(-5deg + 10deg * var(--rand)));
-    transition: transform 0.3s, z-index 0.3s;
-    cursor: pointer;
-    width: 150px;
-    border-radius: 2px;
-}
-
-.polaroid:hover {
-    transform: scale(1.1) rotate(0deg);
-    z-index: 10;
-}
-
-.polaroid img {
+    gap: 2rem;
+    max-width: 1000px;
     width: 100%;
-    height: 130px;
-    object-fit: cover;
+}
+
+.photo-card {
+    background: #fff;
+    padding: 12px 12px 25px 12px; /* Polaroid effect */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    width: 220px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), z-index 0.3s;
+    cursor: pointer;
+    position: relative;
+    /* random rotation using nth-child */
+    transform: rotate(-3deg); 
+}
+
+.photo-card:nth-child(even) { transform: rotate(4deg); }
+.photo-card:nth-child(3n) { transform: rotate(-6deg); }
+.photo-card:nth-child(5n) { transform: rotate(5deg); }
+
+.photo-card:hover {
+    transform: scale(1.15) rotate(0deg) translateY(-10px);
+    z-index: 20;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+}
+
+.photo-frame {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: #000;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This fixes the stretching! */
     display: block;
 }
 
-.gallery h2 {
-    width: 100%;
+.photo-caption {
+    color: #333;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* ================== SLIDE 3: POETRY ================== */
+.poetry-container {
+    background: rgba(20, 10, 15, 0.6);
+    padding: 3.5rem 4rem;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 117, 143, 0.3);
+    max-width: 700px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+
+.poetry-title {
     font-family: var(--font-cursive);
     font-size: 3rem;
     color: var(--accent-pink);
-    margin-bottom: 2rem;
-    text-shadow: 0 0 10px rgba(255,117,143,0.3);
+    margin-bottom: 1rem;
 }
 
-/* Slide 3: Poetry */
-.poetry-box {
-    background: rgba(255,255,255,0.05);
-    padding: 3rem;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.poetry-text {
-    font-family: var(--font-poetry);
+.poetry-divider {
     font-size: 1.5rem;
-    line-height: 1.8;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.poem {
+    font-family: var(--font-poetry);
+    font-size: 1.4rem;
+    line-height: 1.6;
     font-style: italic;
+    color: #ececec;
 }
 
-.poetry-text p {
-    margin-bottom: 1rem;
+.poem-line {
+    margin-bottom: 0.5rem;
 }
 
-/* Slide 4: Happy Birthday */
-.birthday-greeting {
+.poem-signature {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent-pink);
+    text-align: right;
+}
+
+/* ================== SLIDE 4: BEAUTY GALLERY ================== */
+.beauty-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    width: 100%;
+    max-width: 900px;
+}
+
+.beauty-card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    transition: transform 0.3s;
+    width: 350px;
+    height: 450px;
+}
+
+.beauty-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(255,117,143,0.4);
+}
+
+.beauty-frame {
+    width: 100%;
+    height: 100%;
+}
+
+.beauty-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.beauty-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem 1rem 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+}
+
+/* ================== SLIDE 5: BIRTHDAY ================== */
+.birthday-reveal {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.birthday-greeting h1 {
+.surprise-text {
+    font-size: 1.2rem;
+    color: var(--accent-pink);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.birthday-title {
     font-family: var(--font-cursive);
-    font-size: 4rem;
+    font-size: 4.5rem;
     color: var(--accent-pink);
     text-shadow: 0 0 20px rgba(255,117,143,0.5);
     margin-bottom: 1rem;
 }
 
-.birthday-greeting h2 {
+.birthday-name {
     font-family: var(--font-heading);
     font-size: 2.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.2rem;
 }
 
-.main-photo {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 5px solid var(--accent-pink);
-    box-shadow: 0 0 30px rgba(255,117,143,0.4);
-    margin-bottom: 2rem;
-    animation: float 4s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0); }
-}
-
-.wishes {
+.birthday-date {
+    font-family: var(--font-body);
     font-size: 1.2rem;
-    max-width: 600px;
-    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 2rem;
 }
 
-/* Responsive */
+.birthday-cake {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: floatCake 3s ease-in-out infinite;
+}
+
+@keyframes floatCake {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.birthday-photo-frame {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 6px solid var(--accent-pink);
+    box-shadow: 0 0 30px rgba(255,117,143,0.6);
+    margin-bottom: 2rem;
+}
+
+.birthday-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.birthday-message {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+.birthday-wish-highlight {
+    font-weight: 600;
+    color: var(--accent-pink);
+    font-size: 1.4rem;
+    margin-top: 1rem;
+}
+
+.birthday-closing {
+    margin-top: 2rem;
+}
+
+.from-text {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.from-name {
+    font-family: var(--font-cursive);
+    font-size: 2.5rem;
+    color: var(--accent-pink);
+}
+
+/* ================== CONFETTI CONTAINER ================== */
+#confettiContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+}
+
+/* ================== SECRET LETTER BUTTON ================== */
+.btn-letter {
+    background: linear-gradient(135deg, #ff758f, #ff4d6d);
+    color: white;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.btn-letter:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* ================== MODAL SURAT CINTA ================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    position: relative;
+    transform: translateY(50px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><path d="M50 80 Q 20 50, 50 20 Q 80 50, 50 80 Z" fill="rgba(255,117,143,0.05)"/></svg>');
+}
+
+.modal.show .modal-content {
+    transform: translateY(0) scale(1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: var(--accent-pink);
+}
+
+.letter-title {
+    font-family: var(--font-cursive);
+    font-size: 2.8rem;
+    color: var(--accent-pink);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.letter-body {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+    text-align: center;
+}
+
+.highlight-promise {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ff4d6d;
+    background: rgba(255, 117, 143, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.letter-signature {
+    font-family: var(--font-poetry);
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #555;
+    text-align: right;
+    margin-top: 2rem;
+    font-style: italic;
+}
+
+/* ================== RESPONSIVE DESIGN ================== */
 @media (max-width: 768px) {
-    .polaroid {
-        width: 120px;
+    .photo-card {
+        width: 150px;
+        padding: 8px 8px 20px 8px;
     }
-    .polaroid img {
-        height: 100px;
+    .photo-frame {
+        height: 140px;
     }
-    .poetry-box {
-        padding: 1.5rem;
+    .photo-caption {
+        font-size: 0.8rem;
+        margin-top: 10px;
     }
-    .poetry-text {
-        font-size: 1.2rem;
+    .section-title { font-size: 2.5rem; }
+    .poetry-container { padding: 2rem 1.5rem; }
+    .poem { font-size: 1.1rem; }
+    .beauty-card { width: 100%; height: 350px; }
+    .beauty-gallery { flex-direction: column; align-items: center; gap: 1.5rem; }
+    .birthday-title { font-size: 3rem; }
+    .birthday-name { font-size: 2rem; }
+    .birthday-photo-frame { width: 180px; height: 180px; }
+    .flower { transform: scale(0.6); }
+    .opening-text { font-size: 1.8rem; }
+}
+
+/* Fix for Vertical Cutoff on Desktop / Landscape monitors */
+@media (max-height: 900px) {
+    .slide {
+        /* Allow scroll if content is really too tall on super short screens, though we try to scale it down first */
+        overflow-y: auto;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        justify-content: flex-start; /* Prevent centering from pushing top content out of bounds */
     }
-    .birthday-greeting h1 {
-        font-size: 3rem;
-    }
-    .birthday-greeting h2 {
-        font-size: 1.8rem;
-    }
-    .main-photo {
-        width: 200px;
-        height: 200px;
-    }
-    .flower {
-        transform: scale(0.6);
-    }
+    
+    .section-title { font-size: 2.5rem; margin-bottom: 0.2rem; }
+    .section-subtitle { margin-bottom: 1.5rem; }
+    .poetry-container { padding: 1.5rem 2.5rem; }
+    .poem { font-size: 1.15rem; line-height: 1.4; }
+    .poetry-title { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .poetry-divider { margin-bottom: 1rem; }
+    
+    .birthday-reveal { padding-top: 2rem; }
+    .birthday-title { font-size: 3rem; margin-bottom: 0.5rem; }
+    .birthday-name { font-size: 2rem; margin-bottom: 0; }
+    .birthday-date { font-size: 1rem; margin-bottom: 0.5rem; }
+    .birthday-cake { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .birthday-photo-frame { width: 150px; height: 150px; margin-bottom: 1rem; border-width: 4px; }
+    .birthday-message { font-size: 1.05rem; line-height: 1.4; }
+    .birthday-message p { margin-bottom: 0; }
+    .birthday-message br { display: none; } /* remove extra breaks to save space */
+    .birthday-wish-highlight { font-size: 1.2rem; margin-top: 0.5rem; }
+    .birthday-closing { margin-top: 1rem; }
+    .from-name { font-size: 2rem; }
+    
+    .photo-gallery { gap: 1rem; }
+    .photo-card { width: 160px; padding-bottom: 15px; }
+    .photo-frame { height: 120px; }
+    .beauty-card { height: 350px; width: 280px; }
+}
+
+@media (max-height: 650px) {
+    .birthday-cake { display: none; } /* Hide completely to save space */
+    .birthday-title { font-size: 2.2rem; }
+    .birthday-photo-frame { width: 120px; height: 120px; }
 }

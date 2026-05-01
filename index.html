@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Music (optional) -->
-    <audio id="bgMusic" loop preload="auto">
-        <!-- Add music source here if desired -->
-    </audio>
 
     <!-- Floating Flower Petals Canvas -->
     <canvas id="petalCanvas"></canvas>
@@ -249,6 +245,28 @@
             </div>
         </div>
     </section>
+
+    <!-- ==================== MODAL SURAT CINTA ==================== -->
+    <div id="letterModal" class="modal">
+        <div class="modal-content letter-bg">
+            <button class="close-btn" id="closeLetter">&times;</button>
+            <h2 class="letter-title">Pesan Terakhir...</h2>
+            <div class="letter-body">
+                <p>Asri Meilandari sayangku,</p>
+                <br>
+                <p>Terima kasih sudah menjadi bagian terindah dalam hidupku.</p>
+                <p>Aku membuat semua ini karena aku sangat mencintaimu, lebih dari apa pun.</p>
+                <br>
+                <p class="highlight-promise">Dan aku berjanji,<br>dalam 3 tahun lagi, aku akan menikahimu. 💍</p>
+                <br>
+                <p>Tunggu aku ya! ❤️</p>
+            </div>
+            <p class="letter-signature">Dari Andika yang sangat mencintaimu</p>
+        </div>
+    </div>
+
+    <!-- ==================== BACKGROUND MUSIC ==================== -->
+    <audio id="bgMusic" src="audio/sempurna.mp3" loop preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
